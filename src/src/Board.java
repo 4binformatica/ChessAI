@@ -37,6 +37,7 @@ public class Board {
                 board[i][j] = new Cell(i, j, this);
             }
         }
+        setup();
     }
 
     private void setup(){
