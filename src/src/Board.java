@@ -2,7 +2,13 @@ package src;
 
 
 import pieces.Bishop;
+import pieces.King;
 import pieces.Rook;
+import pieces.Knight;
+import pieces.Queen;
+import pieces.Pawn;
+import pieces.Queen;
+
 
 /**
  * Board
@@ -34,12 +40,80 @@ public class Board {
     }
 
     private void setup(){
-        board[0][0].setPiece(new Rook(ChessPiece.BLACK, board[0][0]));
-        board[0][1].setPiece(new Bishop(ChessPiece.BLACK, board[0][1]));
-        board[0][2].setPiece(new Bishop(ChessPiece.BLACK, board[0][2]));
+        
+        //test all the pieces
+        board[4][4].setPiece(new Rook(0, board[4][4]));
+        int[][] moves = board[4][4].getPiece().getPossibleMoves();
+        for(int i = 0; i < moves.length; i++){
+            for(int j = 0; j < moves[i].length; j++){
+                System.out.print(moves[i][j] + " ");
+            }
+            System.out.println();
+        }
+        System.out.println();
 
-        ChessPiece piece = board[0][0].getPiece();
-        System.out.println(piece.isValidateMove(board[6][0]));
+        board[4][4].setPiece(new Bishop(0, board[4][4]));
+        moves = board[4][4].getPiece().getPossibleMoves();
+        for(int i = 0; i < moves.length; i++){
+            for(int j = 0; j < moves[i].length; j++){
+                System.out.print(moves[i][j] + " ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+
+        board[4][4].setPiece(new Knight(0, board[4][4]));
+        moves = board[4][4].getPiece().getPossibleMoves();
+        for(int i = 0; i < moves.length; i++){
+            for(int j = 0; j < moves[i].length; j++){
+                System.out.print(moves[i][j] + " ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+
+        board[4][4].setPiece(new Queen(0, board[4][4]));
+        moves = board[4][4].getPiece().getPossibleMoves();
+        for(int i = 0; i < moves.length; i++){
+            for(int j = 0; j < moves[i].length; j++){
+                System.out.print(moves[i][j] + " ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+
+        board[4][4].setPiece(new King(0, board[4][4]));
+        moves = board[4][4].getPiece().getPossibleMoves();
+        for(int i = 0; i < moves.length; i++){
+            for(int j = 0; j < moves[i].length; j++){
+                System.out.print(moves[i][j] + " ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+
+        board[4][4].setPiece(new Pawn(0, board[4][4]));
+        moves = board[4][4].getPiece().getPossibleMoves();
+        for(int i = 0; i < moves.length; i++){
+            for(int j = 0; j < moves[i].length; j++){
+                System.out.print(moves[i][j] + " ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+
+        board[4][4].setPiece(new Pawn(1, board[4][4]));
+        moves = board[4][4].getPiece().getPossibleMoves();
+        for(int i = 0; i < moves.length; i++){
+            for(int j = 0; j < moves[i].length; j++){
+                System.out.print(moves[i][j] + " ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+        
+        
+       
     }
 
     public Cell getCell(int i, int j) {
@@ -48,6 +122,14 @@ public class Board {
 
     public void setCell(int i, int j, Cell cell) {
         board[i][j] = cell;
+    }
+
+    public Cell[][] getBoard() {
+        return board;
+    }
+
+    public void setBoard(Cell[][] board) {
+        this.board = board;
     }
 
     @Override
