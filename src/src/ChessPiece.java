@@ -15,12 +15,42 @@ public interface ChessPiece {
     final static int POSSIBLE_TO_ATTACK = 2;
     final static int YOURSELF = 3;
     
-
+    /**
+     * <h3>isValidateMove</h3>
+     * <p>Checks if the move is valid</p>
+     * @param endCell - the cell to which the piece is moving
+     * @return whether the move in the given Cell is possible or not
+     */
     public boolean isValidateMove(Cell endCell);
+
+    /**
+     * <h3>move</h3>
+     * <p>Moves the piece to the given cell</p>
+     * @return whether the move was successful or not
+     */
     public boolean move(Cell endCell);
-    public boolean isUnderAttack(Board b);
+
+    /**
+     * <h3>isUnderAttack</h3>
+     * <p>Checks if the piece is under attack</p>
+     * @return whether the piece is under attack or not
+     */
+    public boolean isUnderAttack();
+
+    /**
+     * <h3>getPossibleMoves</h3>
+     * <p>Gets all the possible moves for the piece</p>
+     * @return a 2D array of integers that represent the possible moves
+     */
     public int[][] getPossibleMoves();
     
+    /**
+     * <h3>isUnderAttack</h3>
+     * <p>Checks if the piece is under attack</p>
+     * @param b - the board to check
+     * @param color - the color of the piece
+     * @return whether the piece is under attack or not
+     */
     public static boolean isUnderAttack(Board b, int color) {
         Cell[][] cells = b.getBoard();
         for(Cell c[] : cells){

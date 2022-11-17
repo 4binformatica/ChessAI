@@ -59,8 +59,8 @@ public class Bishop implements ChessPiece {
     }
 
     @Override
-    public boolean isUnderAttack(Board b) {
-        Cell[][] cells = b.getBoard();
+    public boolean isUnderAttack() {
+        Cell[][] cells = cell.getBoard().getBoard();
         for(Cell c[] : cells){
             for(Cell cell : c){
                 ChessPiece p = cell.getPiece();

@@ -40,8 +40,7 @@ public class Board {
         setup();
     }
 
-    private void setup(){
-        
+    private void setup(){        
         //test all the pieces
         board[4][4].setPiece(new Rook(0, board[4][4]));
         int[][] moves = board[4][4].getPiece().getPossibleMoves();
@@ -111,7 +110,7 @@ public class Board {
             }
             System.out.println();
         }
-        System.out.println();
+        System.out.println(); 
         
         
        
