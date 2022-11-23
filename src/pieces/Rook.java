@@ -11,6 +11,8 @@ public class Rook implements ChessPiece {
     private int value;
     private int color;
     private Cell cell;
+    private boolean hasMoved = false;
+
 
     public Rook(int color, Cell cell) {
         this.color = color;
@@ -39,6 +41,7 @@ public class Rook implements ChessPiece {
 
             return true;
         }
+        
         return false;
     }
 
@@ -53,6 +56,7 @@ public class Rook implements ChessPiece {
             endCell.setPiece(this);
             getCell().setPiece(null);
             setCell(endCell);
+            hasMoved = true;
             return true;
         } 
         return false;    
@@ -113,6 +117,13 @@ public class Rook implements ChessPiece {
     }
 
     @Override
+    public boolean hasMoved() {
+        return hasMoved;
+    } 
+
+
+
+    @Override
     public String toString() {
         return getColor() == ChessPiece.BLACK_COLOR ? "R" : "r";
     }
@@ -147,5 +158,7 @@ public class Rook implements ChessPiece {
         }
         return moves;
 
-    } 
+    }
+
+    
 }

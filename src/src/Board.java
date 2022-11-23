@@ -40,7 +40,7 @@ public class Board {
         setup();
     }
 
-    private void setup(){        
+    private void setup(){     /*    
         //test all the pieces
         board[4][4].setPiece(new Rook(0, board[4][4]));
         int[][] moves = board[4][4].getPiece().getPossibleMoves();
@@ -110,11 +110,11 @@ public class Board {
             }
             System.out.println();
         }
-        System.out.println(); 
-        
-        
-       
-    }
+        System.out.println();  */
+        board[7][0].setPiece(new Rook(ChessPiece.BLACK_COLOR, board[7][0]));
+        board[7][4].setPiece(new King(ChessPiece.BLACK_COLOR, board[7][4]));
+        System.out.println(board[7][4].getPiece().move(board[7][2]));
+     }
 
     public Cell getCell(int i, int j) {
         return board[i][j];
@@ -131,6 +131,10 @@ public class Board {
     public void setBoard(Cell[][] board) {
         this.board = board;
     }
+
+    
+
+
 
     @Override
     public String toString() {
@@ -149,5 +153,6 @@ public class Board {
         return result;
     
     }
+    
 
 }

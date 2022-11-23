@@ -136,5 +136,11 @@ public class Knight implements ChessPiece{
         return moves;
 
     }
+
+    @Override
+    public boolean hasMoved() {
+        // TODO Auto-generated method stub
+        return false;
+    }
     
 }

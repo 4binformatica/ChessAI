@@ -10,6 +10,7 @@ public class King implements ChessPiece{
     private int value;
     private int color;
     private Cell cell;
+    private boolean hasMoved = false;
 
     public King(int color, Cell cell) {
         this.color = color;
@@ -45,6 +46,28 @@ public class King implements ChessPiece{
         if (startCell.getI() - 1 == endCell.getI() && startCell.getJ() - 1 == endCell.getJ()) {
             return true;
         }
+        if(!startCell.getPiece().hasMoved()){
+            if(startCell.getI() != endCell.getI()) return false;
+            Cell[][] board = startCell.getBoard().getBoard();
+            // castling to right
+            if(startCell.getJ() - endCell.getJ() == -2){
+                for(int i = startCell.getJ() + 1; i < board.length; i++){
+                    Cell c = board[startCell.getI()][i];
+                    if(c.isEmpty()) continue;
+                    if(c.getPiece().getPiece() != ChessPiece.ROOK || c.getPiece().getColor() != color || c.getPiece().hasMoved()) return false;
+                } 
+                return true; 
+            }
+            // castling to left
+            if(startCell.getJ() - endCell.getJ() == 2){
+                for(int i = startCell.getJ() - 1; i >= 0; i--){
+                    Cell c = board[startCell.getI()][i];
+                    if(c.isEmpty()) continue;
+                    if(c.getPiece().getPiece() != ChessPiece.ROOK || c.getPiece().getColor() != color || c.getPiece().hasMoved()) return false;
+                } 
+                return true; 
+            }
+        }
         return false;        
     }
 
@@ -56,9 +79,43 @@ public class King implements ChessPiece{
     @Override
     public boolean move(Cell endCell) {
         if (isValidateMove(endCell)) {
+            //castling
+            if(Math.abs(endCell.getJ() - cell.getJ()) != 1){
+                Cell[][] board = cell.getBoard().getBoard();
+                ChessPiece rook = null;
+                // castling to right
+                if(cell.getJ() - endCell.getJ() == -2){
+                    for(int i = cell.getJ() + 1; i < board.length; i++){
+                        Cell c = board[cell.getI()][i];
+                        if(c.isEmpty()) continue;
+                        if(c.getPiece().getPiece() == ChessPiece.ROOK){
+                            rook = c.getPiece();
+                            break;
+                        }
+                    } 
+                    if(rook == null) return false;
+                    rook.setCell(board[cell.getI()][cell.getJ() + 1]);
+                }
+                // castling to left
+                if(cell.getJ() - endCell.getJ() == 2){
+                    for(int i = cell.getJ() - 1; i >= 0; i--){
+                        Cell c = board[cell.getI()][i];
+                        if(c.isEmpty()) continue;
+                        if(c.getPiece().getPiece() == ChessPiece.ROOK){
+                            rook = c.getPiece();
+                            break;
+                        }
+                    }
+                    if(rook == null) return false;
+                    rook.setCell(board[cell.getI()][cell.getJ() - 1]); 
+                    
+                }
+            }
+
             endCell.setPiece(this);
             getCell().setPiece(null);
             setCell(endCell);
+            hasMoved = true;
             return true;
         } 
         return false;    
@@ -79,6 +136,8 @@ public class King implements ChessPiece{
         }
         return false;
     }
+
+    
 
     @Override
     public int getColor() {
@@ -124,6 +183,11 @@ public class King implements ChessPiece{
     }
 
     @Override
+    public boolean hasMoved() {
+        return hasMoved;
+    } 
+
+    @Override
     public int[][] getPossibleMoves() {
         //make a int[][] with sizes of the Board
         //fill it with ChessPiece.POSSIBLE_TO_MOVE if the move is valid
@@ -152,6 +216,8 @@ public class King implements ChessPiece{
             }
         }
         return moves;
-    } 
+    }
+
+    
     
 }

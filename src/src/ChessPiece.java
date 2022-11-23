@@ -14,6 +14,8 @@ public interface ChessPiece {
     final static int POSSIBLE_TO_MOVE = 1;
     final static int POSSIBLE_TO_ATTACK = 2;
     final static int YOURSELF = 3;
+
+
     
     /**
      * <h3>isValidateMove</h3>
@@ -66,9 +68,7 @@ public interface ChessPiece {
         return false;
     }
 
-        
-    
-
+    public boolean hasMoved();
 
     @Override
     public String toString();

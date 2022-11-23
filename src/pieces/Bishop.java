@@ -11,6 +11,7 @@ public class Bishop implements ChessPiece {
     private int value;
     private int color;
     private Cell cell;
+    private boolean hasMoved = false;
 
     public Bishop(int color, Cell cell) {
         this.color = color;
@@ -53,6 +54,7 @@ public class Bishop implements ChessPiece {
             endCell.setPiece(this);
             getCell().setPiece(null);
             setCell(endCell);
+            hasMoved = true;
             return true;
         } 
         return false;    
@@ -118,6 +120,11 @@ public class Bishop implements ChessPiece {
     }
 
     @Override
+    public boolean hasMoved() {
+        return hasMoved;
+    }
+
+    @Override
     public int[][] getPossibleMoves() {
         //make a int[][] with sizes of the Board
         //fill it with ChessPiece.POSSIBLE_TO_MOVE if the move is valid
@@ -148,5 +155,7 @@ public class Bishop implements ChessPiece {
         return moves;
 
     }
+
+    
 }
     
