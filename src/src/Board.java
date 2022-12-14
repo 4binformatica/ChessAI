@@ -34,7 +34,8 @@ public class Board {
     }
 
     //make a copy method
-    public Board copy() {
+    @Override
+    public Board clone() {
         Board copy = new Board(getBoard().length, getBoard()[0].length);
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
@@ -176,6 +177,16 @@ public class Board {
             }
         }
         return pieces;
+    }
+
+    //get width of board
+    public int getWidth() {
+        return board[0].length;
+    }
+
+    //get height of board
+    public int getHeight() {
+        return board.length;
     }
 
    
