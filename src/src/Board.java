@@ -101,7 +101,19 @@ public class Board {
         
     }
 
+    public boolean isGameOver(){
+        //return getKing(ChessPiece.WHITE_COLOR).isInCheckMate() || getKing(ChessPiece.BLACK_COLOR).isInCheckMate();
+        return getKing(ChessPiece.WHITE_COLOR) == null || getKing(ChessPiece.BLACK_COLOR) == null;
+    }
 
+    public int getWinner(){
+        if(getKing(ChessPiece.WHITE_COLOR) == null){
+            return ChessPiece.BLACK_COLOR;
+        }else if(getKing(ChessPiece.BLACK_COLOR) == null){
+            return ChessPiece.WHITE_COLOR;
+        }
+        return -1;
+    }
 
     public ChessPiece getPiece(int i, int j) {
         return board[i][j].getPiece();
