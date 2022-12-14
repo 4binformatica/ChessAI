@@ -1,5 +1,7 @@
  package pieces;
 
+import java.util.ArrayList;
+
 import src.Board;
 import src.Cell;
 import src.ChessPiece;
@@ -106,7 +108,7 @@ public class Queen implements ChessPiece{
     }
     
     @Override
-    public int[][] getPossibleMoves() {
+    public int[][] getPossibleMovesMatrix() {
         //make a int[][] with sizes of the Board
         //fill it with ChessPiece.POSSIBLE_TO_MOVE if the move is valid
         //fill it with ChessPiece.IMPOSSIBLE_TO_MOVE if the move is invalid
@@ -135,6 +137,33 @@ public class Queen implements ChessPiece{
         }
         return moves;
 
+    }
+
+    @Override
+    public boolean hasPossibleMoves() {
+        int[][] moves = getPossibleMovesMatrix();
+        for (int i = 0; i < moves.length; i++) {
+            for (int j = 0; j < moves[i].length; j++) {
+                if (moves[i][j] == ChessPiece.POSSIBLE_TO_MOVE || moves[i][j] == ChessPiece.POSSIBLE_TO_ATTACK) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public ArrayList<Cell> getPossibleMoves() {
+        ArrayList<Cell> moves = new ArrayList<Cell>();
+        int[][] movesMatrix = getPossibleMovesMatrix();
+        for (int i = 0; i < movesMatrix.length; i++) {
+            for (int j = 0; j < movesMatrix[i].length; j++) {
+                if (movesMatrix[i][j] == ChessPiece.POSSIBLE_TO_MOVE || movesMatrix[i][j] == ChessPiece.POSSIBLE_TO_ATTACK) {
+                    moves.add(getCell().getBoard().getCell(i, j));
+                }
+            }
+        }
+        return moves;
     }
 
 

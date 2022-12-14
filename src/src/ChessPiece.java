@@ -1,14 +1,17 @@
 package src;
+
+import java.util.ArrayList;
+
 public interface ChessPiece {
     final static int BLACK_COLOR = 0;
     final static int WHITE_COLOR = 1;
 
-    final static int PAWN = 0;
-    final static int BISHOP = 1;
-    final static int KNIGHT = 2;
-    final static int ROOK = 3;
-    final static int QUEEN = 4;
-    final static int KING = 5;
+    final static int PAWN = 5;
+    final static int BISHOP = 2;
+    final static int KNIGHT = 3;
+    final static int ROOK = 4;
+    final static int QUEEN = 1;
+    final static int KING = 0;
 
     final static int IMPOSSIBLE_TO_MOVE = 0;
     final static int POSSIBLE_TO_MOVE = 1;
@@ -40,12 +43,13 @@ public interface ChessPiece {
     public boolean isUnderAttack();
 
     /**
-     * <h3>getPossibleMoves</h3>
+     * <h3>getPossibleMovesMatrix</h3>
      * <p>Gets all the possible moves for the piece</p>
      * @return a 2D array of integers that represent the possible moves
      */
-    public int[][] getPossibleMoves();
-    
+    public int[][] getPossibleMovesMatrix();
+
+    public boolean hasPossibleMoves();
     /**
      * <h3>isUnderAttack</h3>
      * <p>Checks if the piece is under attack</p>
@@ -82,6 +86,9 @@ public interface ChessPiece {
     public void setCell(Cell cell);
     public int getValue();
     public void setValue(int value);
+
+    public ArrayList<Cell> getPossibleMoves();
+
 
 
 }

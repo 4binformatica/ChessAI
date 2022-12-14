@@ -1,5 +1,7 @@
 package pieces;
 
+import java.util.ArrayList;
+
 import src.Board;
 import src.Cell;
 import src.ChessPiece;
@@ -10,6 +12,7 @@ public class Knight implements ChessPiece{
     private int value;
     private int color;
     private Cell cell;
+    private boolean hasMoved = false;
 
     public Knight(int color, Cell cell) {
         this.color = color;
@@ -41,6 +44,7 @@ public class Knight implements ChessPiece{
             endCell.setPiece(this);
             getCell().setPiece(null);
             setCell(endCell);
+            hasMoved = true;
             return true;
         } 
         return false;    
@@ -102,11 +106,11 @@ public class Knight implements ChessPiece{
 
     @Override
     public String toString() {
-        return getColor() == ChessPiece.BLACK_COLOR ? "K" : "k";
+        return getColor() == ChessPiece.BLACK_COLOR ? "N" : "n";
     }
 
     @Override
-    public int[][] getPossibleMoves() {
+    public int[][] getPossibleMovesMatrix() {
         //make a int[][] with sizes of the Board
         //fill it with ChessPiece.POSSIBLE_TO_MOVE if the move is valid
         //fill it with ChessPiece.IMPOSSIBLE_TO_MOVE if the move is invalid
@@ -139,8 +143,34 @@ public class Knight implements ChessPiece{
 
     @Override
     public boolean hasMoved() {
-        // TODO Auto-generated method stub
+        return hasMoved;
+    }
+
+    @Override
+    public boolean hasPossibleMoves() {
+        int[][] moves = getPossibleMovesMatrix();
+        for (int i = 0; i < moves.length; i++) {
+            for (int j = 0; j < moves[i].length; j++) {
+                if (moves[i][j] == ChessPiece.POSSIBLE_TO_MOVE || moves[i][j] == ChessPiece.POSSIBLE_TO_ATTACK) {
+                    return true;
+                }
+            }
+        }
         return false;
+    }
+
+    @Override
+    public ArrayList<Cell> getPossibleMoves() {
+        ArrayList<Cell> moves = new ArrayList<Cell>();
+        int[][] movesMatrix = getPossibleMovesMatrix();
+        for (int i = 0; i < movesMatrix.length; i++) {
+            for (int j = 0; j < movesMatrix[i].length; j++) {
+                if (movesMatrix[i][j] == ChessPiece.POSSIBLE_TO_MOVE || movesMatrix[i][j] == ChessPiece.POSSIBLE_TO_ATTACK) {
+                    moves.add(getCell().getBoard().getCell(i, j));
+                }
+            }
+        }
+        return moves;
     }
     
 }
