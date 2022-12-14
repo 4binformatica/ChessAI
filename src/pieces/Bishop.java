@@ -1,12 +1,15 @@
 package pieces;
 
 import src.ChessPiece;
-import src.Board;
+
+import java.util.ArrayList;
+
 import src.Cell;
 
 public class Bishop implements ChessPiece {
 
     private final int VALUE = 3;
+
 
     private int value;
     private int color;
@@ -125,7 +128,7 @@ public class Bishop implements ChessPiece {
     }
 
     @Override
-    public int[][] getPossibleMoves() {
+    public int[][] getPossibleMovesMatrix() {
         //make a int[][] with sizes of the Board
         //fill it with ChessPiece.POSSIBLE_TO_MOVE if the move is valid
         //fill it with ChessPiece.IMPOSSIBLE_TO_MOVE if the move is invalid
@@ -155,6 +158,35 @@ public class Bishop implements ChessPiece {
         return moves;
 
     }
+
+    @Override
+    public boolean hasPossibleMoves() {
+        int[][] moves = getPossibleMovesMatrix();
+        for (int i = 0; i < moves.length; i++) {
+            for (int j = 0; j < moves[i].length; j++) {
+                if (moves[i][j] == ChessPiece.POSSIBLE_TO_MOVE || moves[i][j] == ChessPiece.POSSIBLE_TO_ATTACK) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public ArrayList<Cell> getPossibleMoves() {
+        int[][] moves = getPossibleMovesMatrix();
+        ArrayList<Cell> possibleMoves = new ArrayList<>();
+        for (int i = 0; i < moves.length; i++) {
+            for (int j = 0; j < moves[i].length; j++) {
+                if (moves[i][j] == ChessPiece.POSSIBLE_TO_MOVE || moves[i][j] == ChessPiece.POSSIBLE_TO_ATTACK) {
+                    possibleMoves.add(getCell().getBoard().getCell(i, j));
+                }
+            }
+        }
+        return possibleMoves;
+    }
+
+    
 
     
 }
