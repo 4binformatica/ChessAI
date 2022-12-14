@@ -58,4 +58,11 @@ public class Cell {
     public void setBoard(Board board) {
         this.board = board;
     }
+
+    @Override
+    public String toString() {
+        return "Cell [i=" + i + ", j=" + j + ", piece=" + piece + "]";
+    }
+
+    
 }
