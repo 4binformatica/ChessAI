@@ -1,6 +1,9 @@
 package src;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import java.awt.Color;
 
 import Graphics.GraphicBoard;
 
@@ -22,14 +25,26 @@ public class App {
         IA ia = new IA(b, gb);
         
         
-        while(true){
+        while(!b.isGameOver()){
             ia.doSomething();
-            Thread.sleep(1000);
+            Thread.sleep(10);
         }
-           
 
-        
-        
-       
+        JPanel panel = new JPanel();
+        JLabel label = new JLabel();
+        Color color = new Color(0, 0, 0);
+        if(b.getWinner() == ChessPiece.WHITE_COLOR){
+            label.setText("White won");
+            color = Color.WHITE;
+        }else{
+            label.setText("Black won");
+            color = Color.BLACK;
+        }
+        panel.setBackground(color);
+        panel.setBounds(frame.getWidth()/2, frame.getHeight()/2, 100, 100);
+
+        panel.add(label);
+        frame.add(panel);
+        frame.setVisible(true);
     }
 }

@@ -247,6 +247,15 @@ public class King implements ChessPiece{
         return moves;
     }
 
+    public boolean isInCheckMate() {
+        if (isUnderAttack()) {
+            if (!hasPossibleMoves()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     
     
 }

@@ -7,6 +7,7 @@ import Graphics.GraphicBoard;
 public class IA {
     Board b;
     GraphicBoard gb;
+    
 
     int color;
      //create a ai for chess game
@@ -38,6 +39,14 @@ public class IA {
         ChessPiece bestPiece = null;
         Cell bestCell = null;
         Cell startCell = null;
+        //radomize the order of the pieces
+        for(int i = 0; i < pieces.size(); i++){
+            int index = (int)(Math.random() * pieces.size());
+            ChessPiece temp = pieces.get(i);
+            pieces.set(i, pieces.get(index));
+            pieces.set(index, temp);
+        }
+
         for(ChessPiece p : pieces){
             ArrayList<Cell> possibleMoves = p.getPossibleMoves();
             for(Cell c : possibleMoves){
@@ -56,7 +65,7 @@ public class IA {
 
 
         }
-        
+
         b.getCell(startCell.getI(), startCell.getJ()).getPiece().move(b.getCell(bestCell.getI(), bestCell.getJ()));
         gb.repaint();     
 
@@ -79,6 +88,10 @@ public class IA {
     
     public int evaluate(int color){
         return evaluate(b, color);
+    }
+
+    public boolean isGameOver(){
+        return b.isGameOver();
     }
 
      
