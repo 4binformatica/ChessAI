@@ -98,7 +98,9 @@ public class Board {
         board[7][3].setPiece(new Queen(ChessPiece.WHITE_COLOR, board[7][3]));
 
         board[0][4].setPiece(new King(ChessPiece.BLACK_COLOR, board[0][4]));
-        board[7][4].setPiece(new King(ChessPiece.WHITE_COLOR, board[7][4]));
+        board[7][4].setPiece(new King(ChessPiece.WHITE_COLOR, board[7][4])); 
+
+        
         
     }
 
@@ -146,7 +148,18 @@ public class Board {
     }
 
     
+    public boolean isGameOver(){
+        return getKing(ChessPiece.WHITE_COLOR).isInCheckMate() || getKing(ChessPiece.BLACK_COLOR).isInCheckMate();
+    }
 
+    public int getWinner(){
+        if(getKing(ChessPiece.WHITE_COLOR).isInCheckMate()){
+            return ChessPiece.BLACK_COLOR;
+        }else if(getKing(ChessPiece.BLACK_COLOR).isInCheckMate()){
+            return ChessPiece.WHITE_COLOR;
+        }
+        return -1;
+    }
 
 
     @Override

@@ -4,14 +4,26 @@ import src.ChessPiece;
 
 import java.util.ArrayList;
 
-import src.Board;
+
 import src.Cell;
 
 public class Rook implements ChessPiece {
 
-    private final int VALUE = 5;
+    private final int VALUE = 50;
+    private final float[][] DEFAULT_POSITION_FACTOR = {
+        {0, 0, 0, 0, 0, 0, 0, 0},
+        {0.5f, 1, 1, 1, 1, 1, 1, 0.5f},
+        {-0.5f, 0, 0, 0, 0, 0, 0, -0.5f},
+        {-0.5f, 0, 0, 0, 0, 0, 0, -0.5f},
+        {-0.5f, 0, 0, 0, 0, 0, 0, -0.5f},
+        {-0.5f, 0, 0, 0, 0, 0, 0, -0.5f},
+        {-0.5f, 0, 0, 0, 0, 0, 0, -0.5f},
+        {0, 0, 0, 0.5f, 0.5f, 0, 0, 0}
+    };
+
 
     private int value;
+    private float[][] positionFactor;
     private int color;
     private Cell cell;
     private boolean hasMoved = false;
@@ -21,6 +33,7 @@ public class Rook implements ChessPiece {
         this.color = color;
         this.cell = cell;
         setValue(VALUE);
+        setPositionFactor(DEFAULT_POSITION_FACTOR);
     }
 
     public static boolean isValidateMove(Cell startCell, Cell endCell) {
@@ -188,6 +201,16 @@ public class Rook implements ChessPiece {
             }
         }
         return moves;
+    }
+
+    @Override
+    public float[][] getPositionFactor() {
+        return positionFactor;
+    }
+
+    @Override
+    public void setPositionFactor(float[][] positionFactor) {
+        this.positionFactor = positionFactor;
     }
 
     

@@ -86,6 +86,8 @@ public interface ChessPiece {
     public void setCell(Cell cell);
     public int getValue();
     public void setValue(int value);
+    public float[][] getPositionFactor();
+    public void setPositionFactor(float[][] positionFactor);
 
     public ArrayList<Cell> getPossibleMoves();
 

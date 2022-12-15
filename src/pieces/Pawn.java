@@ -2,14 +2,25 @@ package pieces;
 
 import java.util.ArrayList;
 
-import src.Board;
+
 import src.Cell;
 import src.ChessPiece;
 
 public class Pawn implements ChessPiece{
-    private final int VALUE = 1;
+    private final int VALUE = 10;
+    private final float[][] DEFAULT_POSITION_FACTOR = {
+        {0, 0, 0, 0, 0, 0, 0, 0},
+        {5, 5, 5, 5, 5, 5, 5, 5},
+        {1, 1, 2, 3, 3, 2, 1, 1},
+        {0.5f, 0.5f, 1, 2.5f, 2.5f, 1, 0.5f, 0.5f},
+        {0, 0, 0, 2, 2, 0, 0, 0},
+        {0.5f, -0.5f, -1, 0, 0, -1, -0.5f, 0.5f},
+        {0.5f, 1, 1, -2, -2, 1, 1, 0.5f},
+        {0, 0, 0, 0, 0, 0, 0, 0}
+    };
 
     private int value;
+    private float[][] positionFactor;
     private int color;
     private Cell cell;
     private boolean hasMoved = false;
@@ -18,6 +29,7 @@ public class Pawn implements ChessPiece{
         this.color = color;
         this.cell = cell;
         setValue(VALUE);
+        setPositionFactor(DEFAULT_POSITION_FACTOR);
     }
 
     public static boolean isValidateMove(Cell startCell, Cell endCell) {
@@ -171,6 +183,16 @@ public class Pawn implements ChessPiece{
             }
         }
         return moves;
+    }
+
+    @Override
+    public float[][] getPositionFactor() {
+        return positionFactor;
+    }
+
+    @Override
+    public void setPositionFactor(float[][] positionFactor) {
+        this.positionFactor = positionFactor;
     }
 
     

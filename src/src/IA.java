@@ -9,7 +9,7 @@ public class IA {
     GraphicBoard gb;
 
     int color;
-     //create a ai for chess game
+
     public IA(Board b, GraphicBoard gb) {
         this.b = b;
         this.color = ChessPiece.WHITE_COLOR;
@@ -32,9 +32,9 @@ public class IA {
     }
 
     public void doSomething(){
-        System.out.println("IA is thinking...");
+        //System.out.println("IA is thinking...");
         ArrayList<ChessPiece> pieces = getAllMovablePieces(color);
-        System.out.println("IA found " + pieces.size() + " pieces");
+        //System.out.println("IA found " + pieces.size() + " pieces");
         int max = Integer.MIN_VALUE;
         
         ArrayList<ChessPiece> bestPieces = new ArrayList<>();
@@ -42,13 +42,13 @@ public class IA {
         ArrayList<Cell> originalCells = new ArrayList<>();
         for(ChessPiece p : pieces){
             ArrayList<Cell> possibleMoves = p.getPossibleMoves();
-            System.out.println("IA found " + possibleMoves.size() + " possible moves for " + p);
+            //System.out.println("IA found " + possibleMoves.size() + " possible moves for " + p);
             for(Cell c : possibleMoves){
                 Board clone = b.clone();
                 ChessPiece piece = clone.getCell(p.getCell().getI(), p.getCell().getJ()).getPiece();
                 piece.move(clone.getCell(c.getI(), c.getJ()));
                 int score = evaluate(clone, color);
-                System.out.println(score);
+                //System.out.println(score);
                 if(score > max){
                     max = score;
                     bestPieces.clear();
@@ -96,7 +96,8 @@ public class IA {
             for(int j = 0; j < board[i].length; j++){
                 ChessPiece p = board[i][j].getPiece();
                 if(p != null && p.getColor() == color){
-                    score += board[i][j].getPiece().getValue();
+                    ChessPiece piece = board[i][j].getPiece();
+                    score += piece.getValue() + piece.getPositionFactor()[piece.getCell().getI()][piece.getCell().getJ()];
                 }
             }
         }

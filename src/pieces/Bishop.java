@@ -8,10 +8,21 @@ import src.Cell;
 
 public class Bishop implements ChessPiece {
 
-    private final int VALUE = 3;
+    private final int VALUE = 30;
+    private final float[][] DEFAULT_POSITION_FACTOR = {
+        {-2, -1, -1, -1, -1, -1, -1, -2},
+        {-1, 0, 0, 0, 0, 0, 0, -1},
+        {-1, 0, 0.5f, 1, 1, 0.5f, 0, -1},
+        {-1, 0.5f, 0.5f, 1, 1, 0.5f, 0.5f, -1},
+        {-1, 0, 1, 1, 1, 1, 0, -1},
+        {-1, 1, 1, 1, 1, 1, 1, -1},
+        {-1, 0.5f, 0, 0, 0, 0, 0.5f, -1},
+        {-2, -1, -1, -1, -1, -1, -1, -2}
+    };
 
 
     private int value;
+    private float[][] positionFactor;
     private int color;
     private Cell cell;
     private boolean hasMoved = false;
@@ -20,6 +31,7 @@ public class Bishop implements ChessPiece {
         this.color = color;
         this.cell = cell;
         setValue(VALUE);
+        setPositionFactor(DEFAULT_POSITION_FACTOR);
     }
 
     public static boolean isValidateMove(Cell startCell, Cell endCell) {
@@ -111,6 +123,17 @@ public class Bishop implements ChessPiece {
     public void setValue(int value) {
         this.value = value;
     }
+
+    @Override
+    public float[][] getPositionFactor() {
+        return positionFactor;
+    }
+
+    @Override
+    public void setPositionFactor(float[][] positionFactor) {
+        this.positionFactor = positionFactor;
+    }
+
 
     @Override
     public int getValue() {
