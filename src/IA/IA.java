@@ -1,8 +1,11 @@
-package src;
+package IA;
 
 import java.util.ArrayList;
 
 import Graphics.GraphicBoard;
+import src.Board;
+import src.Cell;
+import src.ChessPiece;
 
 public class IA {
     Board b;
@@ -18,6 +21,8 @@ public class IA {
 
     
 
+    
+
     private ArrayList<ChessPiece> getAllMovablePieces(int color){
         ArrayList<ChessPiece> pieces = new ArrayList<>();
         for(int i = 0; i < b.getBoard().length; i++){
@@ -30,6 +35,8 @@ public class IA {
         }
         return pieces;
     }
+
+
 
     public void doSomething(){
         //System.out.println("IA is thinking...");
