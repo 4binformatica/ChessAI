@@ -2,6 +2,8 @@ package IA;
 
 import java.util.ArrayList;
 
+import javax.swing.tree.TreeNode;
+
 import Graphics.GraphicBoard;
 import src.Board;
 import src.Cell;
@@ -13,9 +15,9 @@ public class IA {
 
     int color;
 
-    public IA(Board b, GraphicBoard gb) {
+    public IA(Board b, GraphicBoard gb , int color) {
         this.b = b;
-        this.color = ChessPiece.WHITE_COLOR;
+        this.color = color;
         this.gb = gb;
     }
 
@@ -41,7 +43,7 @@ public class IA {
     public void doSomething(){
         //System.out.println("IA is thinking...");
         ArrayList<ChessPiece> pieces = getAllMovablePieces(color);
-        //System.out.println("IA found " + pieces.size() + " pieces");
+        System.out.println("IA found " + pieces.size() + " pieces");
         int max = Integer.MIN_VALUE;
         
         ArrayList<ChessPiece> bestPieces = new ArrayList<>();
@@ -80,10 +82,37 @@ public class IA {
 
         
         b.getCell(startCell.getI(), startCell.getJ()).getPiece().move(b.getCell(bestCell.getI(), bestCell.getJ()));
-        gb.repaint();     
 
-        color = color == ChessPiece.WHITE_COLOR ? ChessPiece.BLACK_COLOR : ChessPiece.WHITE_COLOR;
+
+
+        
+
+        gb.repaint();     
     }
+
+    //make minimax algorithm
+    public int minimax(BoardNode tree, int depth, boolean isMaximisingPlayer){
+        if(depth == 0){
+            return evaluate(tree.getBoard(), color);
+        }
+
+        if(isMaximisingPlayer){
+            int bestScore = Integer.MIN_VALUE;
+            for(BoardNode child : tree.getChildren()){
+                int score = minimax(child, depth - 1, false);
+                bestScore = Math.max(score, bestScore);
+            }
+            return bestScore;
+        }else{
+            int bestScore = Integer.MAX_VALUE;
+            for(BoardNode child : tree.getChildren()){
+                int score = minimax(child, depth - 1, true);
+                bestScore = Math.min(score, bestScore);
+            }
+            return bestScore;
+        }
+    }
+    
 
     public static int evaluate(Board b, int color) {
         int score = 0;
@@ -104,7 +133,8 @@ public class IA {
                 ChessPiece p = board[i][j].getPiece();
                 if(p != null && p.getColor() == color){
                     ChessPiece piece = board[i][j].getPiece();
-                    score += piece.getValue() + piece.getPositionFactor()[piece.getCell().getI()][piece.getCell().getJ()];
+                    score += piece.getValue();
+                    score +=  piece.getPositionFactor()[piece.getCell().getI()][piece.getCell().getJ()];
                 }
             }
         }
@@ -112,6 +142,10 @@ public class IA {
 
         return score;
     }
+
+    
+    
+    
     
     public int evaluate(int color){
         return evaluate(b, color);

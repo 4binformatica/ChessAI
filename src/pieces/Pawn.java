@@ -42,6 +42,10 @@ public class Pawn implements ChessPiece{
         if (startCell.getI() + forward == endCell.getI() && (startCell.getJ() + 1 == endCell.getJ() || startCell.getJ() - 1 == endCell.getJ()) && endCell.getPiece() != null && startCell.getPiece().getColor() != endCell.getPiece().getColor()) {
             return true;
         }
+        
+        if(!startCell.getPiece().hasMoved() && startCell.getJ() == endCell.getJ() && startCell.getBoard().getCell(startCell.getI() + forward, startCell.getJ()).isEmpty() && endCell.getI() - startCell.getI() == forward*2 ){
+            return true;
+        }
         return false;
     }
 

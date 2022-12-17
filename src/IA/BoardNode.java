@@ -54,8 +54,16 @@ public class BoardNode {
         this.children = children;
     }
 
+    public ArrayList<BoardNode> getChilren() {
+        return children;
+    }
+
     public void addChild(BoardNode child) {
         this.children.add(child);
+    }
+
+    public void removeChild(BoardNode child) {
+        this.children.remove(child);
     }
 
     public int getColor() {

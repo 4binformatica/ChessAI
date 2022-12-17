@@ -17,13 +17,17 @@ public class App {
 
 
 
-        IA ia = new IA(b, gb);
-        
+        IA iaB = new IA(b, gb, ChessPiece.BLACK_COLOR);     
+        IA iaW = new IA(b, gb, ChessPiece.WHITE_COLOR);
+
+        //iaW.doSomething();
         
         while(!b.isGameOver()){
             System.out.println(b.getKing(0).isInCheckMate());
             System.out.println(b.getKing(1).isInCheckMate());
-            ia.doSomething();
+            iaW.doSomething();
+            Thread.sleep(500);
+            iaB.doSomething();
             Thread.sleep(500);
         }
 
