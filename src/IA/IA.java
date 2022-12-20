@@ -2,7 +2,6 @@ package IA;
 
 import java.util.ArrayList;
 
-import javax.swing.tree.TreeNode;
 
 import Graphics.GraphicBoard;
 import src.Board;
@@ -38,9 +37,60 @@ public class IA {
         return pieces;
     }
 
+    public void iAMovingWithTree(){
+        BoardTree tree = new BoardTree(b, color, 2);
+        
+        tree.generateChildren(color);
+
+        ArrayList<BoardNode> children = tree.getRoot().getChildren();
+
+        ArrayList<Integer> scores = new ArrayList<>();
+        
+        for(BoardNode child : children){
+            scores.add(minimax(child, 1, false));
+        }
+
+        //get the best scores
+        int max = Integer.MIN_VALUE;
+        ArrayList<Integer> bestScores = new ArrayList<>();
+        for(int i = 0; i < scores.size(); i++){
+            if(scores.get(i) > max){
+                max = scores.get(i);
+                bestScores.clear();
+                bestScores.add(i);
+            }else if(scores.get(i) == max){
+                bestScores.add(i);
+            }
+        }
+
+        
+        
+        int index = bestScores.get((int)(Math.random() * bestScores.size()));
+        
+        Board bestBoard = children.get(index).getBoard();
+
+        Cell startCell = null;
+        Cell endCell = null;
+
+        for(int i = 0; i < b.getBoard().length; i++){
+            for(int j = 0; j < b.getBoard()[i].length; j++){
+                if(b.getCell(i, j).isOccupied() && bestBoard.getCell(i, j).isEmpty()){
+                    startCell = b.getCell(i, j);
+                }
+                if(b.getCell(i, j).isEmpty() && bestBoard.getCell(i, j).isOccupied()){
+                    endCell = b.getCell(i, j);
+                }
+            }
+        }
+
+        System.out.println("IA chose " + startCell + " to " + endCell);
+
+        startCell.getPiece().move(endCell, false);
+    }
 
 
-    public void doSomething(){
+
+    public void iaMovingWithEvaluation(){
         //System.out.println("IA is thinking...");
         ArrayList<ChessPiece> pieces = getAllMovablePieces(color);
         System.out.println("IA found " + pieces.size() + " pieces");
@@ -55,7 +105,7 @@ public class IA {
             for(Cell c : possibleMoves){
                 Board clone = b.clone();
                 ChessPiece piece = clone.getCell(p.getCell().getI(), p.getCell().getJ()).getPiece();
-                piece.move(clone.getCell(c.getI(), c.getJ()));
+                piece.move(clone.getCell(c.getI(), c.getJ()), true);
                 int score = evaluate(clone, color);
                 //System.out.println(score);
                 if(score > max){
@@ -81,13 +131,12 @@ public class IA {
 
 
         
-        b.getCell(startCell.getI(), startCell.getJ()).getPiece().move(b.getCell(bestCell.getI(), bestCell.getJ()));
+        b.getCell(startCell.getI(), startCell.getJ()).getPiece().move(b.getCell(bestCell.getI(), bestCell.getJ()), false);
 
 
 
         
 
-        gb.repaint();     
     }
 
     //make minimax algorithm

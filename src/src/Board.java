@@ -3,6 +3,7 @@ package src;
 
 import java.util.ArrayList;
 
+import Graphics.GraphicNotifyer;
 import pieces.Bishop;
 import pieces.King;
 import pieces.Rook;
@@ -15,13 +16,14 @@ import pieces.Pawn;
 /**
  * Board
  */
-public class Board {
+public class Board implements NotifyMovement{
 
     
     private final Cell[][] DEFAULT_BOARD = new Cell[8][8];
 
     private Cell[][] board;
 
+    ArrayList<GraphicNotifyer> graphicListeners = new ArrayList<>();
 
     public Board() {
         board = DEFAULT_BOARD;
@@ -201,6 +203,23 @@ public class Board {
     public int getHeight() {
         return board.length;
     }
+
+    @Override
+    public void notifyMovement() {
+        for (GraphicNotifyer listener : graphicListeners) {
+            listener.notifyMovement();
+        }
+    }
+
+    public void addGraphicListener(GraphicNotifyer listener) {
+        graphicListeners.add(listener);
+    }
+
+    public void removeGraphicListener(GraphicNotifyer listener) {
+        graphicListeners.remove(listener);
+    }
+
+
 
    
 

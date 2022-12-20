@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import src.Board;
 import src.Cell;
 import src.ChessPiece;
+import src.NotifyMovement;
 
 public class King implements ChessPiece{
     private final int VALUE = 900;
@@ -19,6 +20,8 @@ public class King implements ChessPiece{
         {2, 2, 0, 0, 0, 0, 2, 2},
         {2, 3, 1, 0, 0, 1, 3, 2}
     };
+
+    private ArrayList<NotifyMovement> observers = new ArrayList<NotifyMovement>();
 
 
 
@@ -96,7 +99,7 @@ public class King implements ChessPiece{
     }
 
     @Override
-    public boolean move(Cell endCell) {
+    public boolean move(Cell endCell, boolean simulated) {
         if (isValidateMove(endCell)) {
             //castling
             if(Math.abs(endCell.getJ() - cell.getJ()) != 1){
@@ -135,7 +138,12 @@ public class King implements ChessPiece{
             getCell().setPiece(null);
             setCell(endCell);
             hasMoved = true;
+            if(!simulated)
+                notifyObservers();
             return true;
+
+
+
         } 
         return false;    
     }
@@ -275,7 +283,7 @@ public class King implements ChessPiece{
 
         for(ChessPiece p : pieces){
             for(Cell c : p.getPossibleMoves()){
-                clone.getPiece(p.getCell().getI(), p.getCell().getJ()).move(c);
+                clone.getPiece(p.getCell().getI(), p.getCell().getJ()).move(c, true);
                 if(!isUnderAttack()){
                     return false;
                 }
@@ -296,6 +304,23 @@ public class King implements ChessPiece{
         this.positionFactor = positionFactor;        
     }
 
-    
-    
+    @Override
+    public void addObserver(NotifyMovement observer) {
+        observers.add(observer);       
+    }
+
+    @Override
+    public void removeObserver(NotifyMovement observer) {
+        observers.remove(observer);   
+    }
+
+    @Override
+    public ArrayList<NotifyMovement> getObservers() {
+        return observers;
+    }
+
+    @Override
+    public void notifyObservers() {
+        for(NotifyMovement nm : observers) nm.notifyMovement();
+    }
 }

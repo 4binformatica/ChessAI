@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import java.awt.MouseInfo;
 
 
 
@@ -24,7 +23,7 @@ import src.Board;
 import src.Cell;
 import src.ChessPiece;
 
-public class GraphicBoard extends JPanel implements MouseListener{
+public class GraphicBoard extends JPanel implements MouseListener, GraphicNotifyer{
     Board b;
 
 
@@ -155,6 +154,11 @@ public class GraphicBoard extends JPanel implements MouseListener{
 
     @Override
     public void mouseExited(MouseEvent e) {}
+
+    @Override
+    public void notifyMovement() {
+        this.repaint();        
+    }
 
    
 

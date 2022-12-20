@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import src.Cell;
 import src.ChessPiece;
+import src.NotifyMovement;
 
 public class Pawn implements ChessPiece{
     private final int VALUE = 10;
@@ -18,6 +19,8 @@ public class Pawn implements ChessPiece{
         {0.5f, 1, 1, -2, -2, 1, 1, 0.5f},
         {0, 0, 0, 0, 0, 0, 0, 0}
     };
+
+    ArrayList<NotifyMovement> observers = new ArrayList<>();
 
     private int value;
     private float[][] positionFactor;
@@ -43,9 +46,10 @@ public class Pawn implements ChessPiece{
             return true;
         }
         
-        if(!startCell.getPiece().hasMoved() && startCell.getJ() == endCell.getJ() && startCell.getBoard().getCell(startCell.getI() + forward, startCell.getJ()).isEmpty() && endCell.getI() - startCell.getI() == forward*2 ){
+        if(!startCell.getPiece().hasMoved() && startCell.getJ() == endCell.getJ() && startCell.getBoard().getCell(startCell.getI() + forward, startCell.getJ()).isEmpty() && endCell.getI() - startCell.getI() == forward*2 && endCell.isEmpty()){
             return true;
         }
+        
         return false;
     }
 
@@ -55,12 +59,14 @@ public class Pawn implements ChessPiece{
     }
 
     @Override
-    public boolean move(Cell endCell) {
+    public boolean move(Cell endCell, boolean simulated) {
         if (isValidateMove(endCell)) {
             endCell.setPiece(this);
             getCell().setPiece(null);
             setCell(endCell);
             hasMoved = true;
+            if(!simulated)
+                notifyObservers();
             return true;
         } 
         return false;    
@@ -199,9 +205,23 @@ public class Pawn implements ChessPiece{
         this.positionFactor = positionFactor;
     }
 
-    
+    @Override
+    public void addObserver(NotifyMovement observer) {
+        observers.add(observer);       
+    }
 
+    @Override
+    public void removeObserver(NotifyMovement observer) {
+        observers.remove(observer);   
+    }
 
+    @Override
+    public ArrayList<NotifyMovement> getObservers() {
+        return observers;
+    }
 
-    
+    @Override
+    public void notifyObservers() {
+        for(NotifyMovement nm : observers) nm.notifyMovement();
+    }    
 }

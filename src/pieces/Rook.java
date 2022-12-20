@@ -1,6 +1,7 @@
 package pieces;
 
 import src.ChessPiece;
+import src.NotifyMovement;
 
 import java.util.ArrayList;
 
@@ -20,6 +21,8 @@ public class Rook implements ChessPiece {
         {-0.5f, 0, 0, 0, 0, 0, 0, -0.5f},
         {0, 0, 0, 0.5f, 0.5f, 0, 0, 0}
     };
+
+    ArrayList<NotifyMovement> observers = new ArrayList<>();
 
 
     private int value;
@@ -67,12 +70,14 @@ public class Rook implements ChessPiece {
     }
 
     @Override
-    public boolean move(Cell endCell) {
+    public boolean move(Cell endCell, boolean simulated) {
         if (isValidateMove(endCell)) {
             endCell.setPiece(this);
             getCell().setPiece(null);
             setCell(endCell);
             hasMoved = true;
+            if(!simulated)
+                notifyObservers();
             return true;
         } 
         return false;    
@@ -211,6 +216,26 @@ public class Rook implements ChessPiece {
     @Override
     public void setPositionFactor(float[][] positionFactor) {
         this.positionFactor = positionFactor;
+    }
+
+    @Override
+    public void addObserver(NotifyMovement observer) {
+        observers.add(observer);       
+    }
+
+    @Override
+    public void removeObserver(NotifyMovement observer) {
+        observers.remove(observer);   
+    }
+
+    @Override
+    public ArrayList<NotifyMovement> getObservers() {
+        return observers;
+    }
+
+    @Override
+    public void notifyObservers() {
+        for(NotifyMovement nm : observers) nm.notifyMovement();
     }
 
     

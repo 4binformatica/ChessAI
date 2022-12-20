@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import src.Cell;
 import src.ChessPiece;
+import src.NotifyMovement;
 
 public class Knight implements ChessPiece{
     private final int VALUE = 30;
@@ -17,6 +18,8 @@ public class Knight implements ChessPiece{
         {-4, -2, 0, 0.5f, 0.5f, 0, -2, -4},
         {-5, -4, -3, -3, -3, -3, -4, -5}
     };
+
+    ArrayList<NotifyMovement> observers = new ArrayList<>();
 
     private int value;
     private float[][] positionFactor;
@@ -50,12 +53,14 @@ public class Knight implements ChessPiece{
     }
 
     @Override
-    public boolean move(Cell endCell) {
+    public boolean move(Cell endCell, boolean simulated) {
         if (isValidateMove(endCell)) {
             endCell.setPiece(this);
             getCell().setPiece(null);
             setCell(endCell);
             hasMoved = true;
+            if(!simulated)
+                notifyObservers();
             return true;
         } 
         return false;    
@@ -192,6 +197,26 @@ public class Knight implements ChessPiece{
     @Override
     public void setPositionFactor(float[][] positionFactor) {
            this.positionFactor = positionFactor;   
+    }
+
+    @Override
+    public void addObserver(NotifyMovement observer) {
+        observers.add(observer);       
+    }
+
+    @Override
+    public void removeObserver(NotifyMovement observer) {
+        observers.remove(observer);   
+    }
+
+    @Override
+    public ArrayList<NotifyMovement> getObservers() {
+        return observers;
+    }
+
+    @Override
+    public void notifyObservers() {
+        for(NotifyMovement nm : observers) nm.notifyMovement();
     }
     
 }
