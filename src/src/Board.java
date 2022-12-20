@@ -3,6 +3,7 @@ package src;
 
 import java.util.ArrayList;
 
+import Graphics.GraphicNotifyer;
 import pieces.Bishop;
 import pieces.King;
 import pieces.Rook;
@@ -15,13 +16,14 @@ import pieces.Pawn;
 /**
  * Board
  */
-public class Board {
+public class Board implements NotifyMovement{
 
     
     private final Cell[][] DEFAULT_BOARD = new Cell[8][8];
 
     private Cell[][] board;
 
+    ArrayList<GraphicNotifyer> graphicListeners = new ArrayList<>();
 
     public Board() {
         board = DEFAULT_BOARD;
@@ -98,7 +100,9 @@ public class Board {
         board[7][3].setPiece(new Queen(ChessPiece.WHITE_COLOR, board[7][3]));
 
         board[0][4].setPiece(new King(ChessPiece.BLACK_COLOR, board[0][4]));
-        board[7][4].setPiece(new King(ChessPiece.WHITE_COLOR, board[7][4]));
+        board[7][4].setPiece(new King(ChessPiece.WHITE_COLOR, board[7][4])); 
+
+        
         
     }
 
@@ -146,7 +150,18 @@ public class Board {
     }
 
     
+    public boolean isGameOver(){
+        return getKing(ChessPiece.WHITE_COLOR).isInCheckMate() || getKing(ChessPiece.BLACK_COLOR).isInCheckMate();
+    }
 
+    public int getWinner(){
+        if(getKing(ChessPiece.WHITE_COLOR).isInCheckMate()){
+            return ChessPiece.BLACK_COLOR;
+        }else if(getKing(ChessPiece.BLACK_COLOR).isInCheckMate()){
+            return ChessPiece.WHITE_COLOR;
+        }
+        return -1;
+    }
 
 
     @Override
@@ -188,6 +203,23 @@ public class Board {
     public int getHeight() {
         return board.length;
     }
+
+    @Override
+    public void notifyMovement() {
+        for (GraphicNotifyer listener : graphicListeners) {
+            listener.notifyMovement();
+        }
+    }
+
+    public void addGraphicListener(GraphicNotifyer listener) {
+        graphicListeners.add(listener);
+    }
+
+    public void removeGraphicListener(GraphicNotifyer listener) {
+        graphicListeners.remove(listener);
+    }
+
+
 
    
 

@@ -18,7 +18,6 @@ public interface ChessPiece {
     final static int POSSIBLE_TO_ATTACK = 2;
     final static int YOURSELF = 3;
 
-
     
     /**
      * <h3>isValidateMove</h3>
@@ -33,7 +32,8 @@ public interface ChessPiece {
      * <p>Moves the piece to the given cell</p>
      * @return whether the move was successful or not
      */
-    public boolean move(Cell endCell);
+    public boolean move(Cell endCell, boolean simulated);
+
 
     /**
      * <h3>isUnderAttack</h3>
@@ -86,9 +86,14 @@ public interface ChessPiece {
     public void setCell(Cell cell);
     public int getValue();
     public void setValue(int value);
+    public float[][] getPositionFactor();
+    public void setPositionFactor(float[][] positionFactor);
 
     public ArrayList<Cell> getPossibleMoves();
 
+    public void addObserver(NotifyMovement observer);
+    public void removeObserver(NotifyMovement observer);
+    public void notifyObservers();
 
-
+    public ArrayList<NotifyMovement> getObservers();
 }

@@ -2,15 +2,29 @@
 
 import java.util.ArrayList;
 
-import src.Board;
+
 import src.Cell;
 import src.ChessPiece;
+import src.NotifyMovement;
 
 public class Queen implements ChessPiece{
 
-    private final int VALUE = 9;
+    private final int VALUE = 90;
+    private final float[][] DEFAULT_POSITION_FACTOR = {
+        {-2, -1, -1, -0.5f, -0.5f, -1, -1, -2},
+        {-1, 0, 0, 0, 0, 0, 0, -1},
+        {-1, 0, 0.5f, 0.5f, 0.5f, 0.5f, 0, -1},
+        {-0.5f, 0, 0.5f, 0.5f, 0.5f, 0.5f, 0, -0.5f},
+        {0, 0, 0.5f, 0.5f, 0.5f, 0.5f, 0, -0.5f},
+        {-1, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0, -1},
+        {-1, 0, 0.5f, 0, 0, 0, 0, -1},
+        {-2, -1, -1, -0.5f, -0.5f, -1, -1, -2}
+    };
+
+    ArrayList<NotifyMovement> observers = new ArrayList<>();
 
     private int value;
+    private float[][] positionFactor;
     private int color;
     private Cell cell;
     private boolean hasMoved = false;
@@ -20,6 +34,7 @@ public class Queen implements ChessPiece{
         this.color = color;
         this.cell = cell;
         setValue(VALUE);
+        setPositionFactor(DEFAULT_POSITION_FACTOR);
     }
 
     public static boolean isValidateMove(Cell startCell, Cell endCell) {
@@ -32,12 +47,14 @@ public class Queen implements ChessPiece{
     }
 
     @Override
-    public boolean move(Cell endCell) {
+    public boolean move(Cell endCell, boolean simulated) {
         if (isValidateMove(endCell)) {
             endCell.setPiece(this);
             getCell().setPiece(null);
             setCell(endCell);
             hasMoved = true;
+            if(!simulated)
+                notifyObservers();
             return true;
         } 
         return false;    
@@ -166,6 +183,34 @@ public class Queen implements ChessPiece{
         return moves;
     }
 
+    @Override
+    public float[][] getPositionFactor() {
+        return positionFactor;
+    }
 
+    @Override
+    public void setPositionFactor(float[][] positionFactor) {
+        this.positionFactor = positionFactor;
+    }
+
+    @Override
+    public void addObserver(NotifyMovement observer) {
+        observers.add(observer);       
+    }
+
+    @Override
+    public void removeObserver(NotifyMovement observer) {
+        observers.remove(observer);   
+    }
+
+    @Override
+    public ArrayList<NotifyMovement> getObservers() {
+        return observers;
+    }
+
+    @Override
+    public void notifyObservers() {
+        for(NotifyMovement nm : observers) nm.notifyMovement();
+    }
     
 }

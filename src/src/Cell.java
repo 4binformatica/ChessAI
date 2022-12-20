@@ -29,6 +29,8 @@ public class Cell {
 
     public void setPiece(ChessPiece piece) {
         this.piece = piece;
+        if(piece != null)
+            piece.addObserver(this.getBoard());
     }
 
     public ChessPiece getPiece() {

@@ -5,11 +5,28 @@ import java.util.ArrayList;
 import src.Board;
 import src.Cell;
 import src.ChessPiece;
+import src.NotifyMovement;
 
 public class King implements ChessPiece{
-    private final int VALUE = 999;
+    private final int VALUE = 900;
+
+    private final float[][] DEFAULT_POSITION_FACTOR = {
+        {-3, -4, -4, -5, -5, -4, -4, -3},
+        {-3, -4, -4, -5, -5, -4, -4, -3},
+        {-3, -4, -4, -5, -5, -4, -4, -3},
+        {-3, -4, -4, -5, -5, -4, -4, -3},
+        {-2, -3, -3, -4, -4, -3, -3, -2},
+        {-1, -2, -2, -2, -2, -2, -2, -1},
+        {2, 2, 0, 0, 0, 0, 2, 2},
+        {2, 3, 1, 0, 0, 1, 3, 2}
+    };
+
+    private ArrayList<NotifyMovement> observers = new ArrayList<NotifyMovement>();
+
+
 
     private int value;
+    private float[][] positionFactor;
     private int color;
     private Cell cell;
     private boolean hasMoved = false;
@@ -18,6 +35,7 @@ public class King implements ChessPiece{
         this.color = color;
         this.cell = cell;
         setValue(VALUE);
+        setPositionFactor(DEFAULT_POSITION_FACTOR);
     }
 
     public static boolean isValidateMove(Cell startCell, Cell endCell, int color) {
@@ -55,8 +73,9 @@ public class King implements ChessPiece{
             if(startCell.getJ() - endCell.getJ() == -2){
                 for(int i = startCell.getJ() + 1; i < board.length; i++){
                     Cell c = board[startCell.getI()][i];
+                    if(c.isEmpty() && i == board.length - 1) return false;
                     if(c.isEmpty()) continue;
-                    if(c.getPiece().getPiece() != ChessPiece.ROOK || c.getPiece().getColor() != color || c.getPiece().hasMoved()) return false;
+                    if(c.getPiece().getPiece() != ChessPiece.ROOK || c.getPiece().getColor() != color || c.getPiece().hasMoved()) return false;   
                 } 
                 return true; 
             }
@@ -64,6 +83,7 @@ public class King implements ChessPiece{
             if(startCell.getJ() - endCell.getJ() == 2){
                 for(int i = startCell.getJ() - 1; i >= 0; i--){
                     Cell c = board[startCell.getI()][i];
+                    if(c.isEmpty() && i == 0) return false;
                     if(c.isEmpty()) continue;
                     if(c.getPiece().getPiece() != ChessPiece.ROOK || c.getPiece().getColor() != color || c.getPiece().hasMoved()) return false;
                 } 
@@ -79,7 +99,7 @@ public class King implements ChessPiece{
     }
 
     @Override
-    public boolean move(Cell endCell) {
+    public boolean move(Cell endCell, boolean simulated) {
         if (isValidateMove(endCell)) {
             //castling
             if(Math.abs(endCell.getJ() - cell.getJ()) != 1){
@@ -118,7 +138,12 @@ public class King implements ChessPiece{
             getCell().setPiece(null);
             setCell(endCell);
             hasMoved = true;
+            if(!simulated)
+                notifyObservers();
             return true;
+
+
+
         } 
         return false;    
     }
@@ -247,6 +272,55 @@ public class King implements ChessPiece{
         return moves;
     }
 
-    
-    
+    public boolean isInCheckMate() {
+        //check if the king is under attack
+        if(!isUnderAttack()) return false;
+        //check if the king can move
+        if(hasPossibleMoves()) return false;
+        //check if another piece can block the check
+        ArrayList<ChessPiece> pieces = getCell().getBoard().getPieces(getColor());
+        Board clone = getCell().getBoard().clone();
+
+        for(ChessPiece p : pieces){
+            for(Cell c : p.getPossibleMoves()){
+                clone.getPiece(p.getCell().getI(), p.getCell().getJ()).move(c, true);
+                if(!isUnderAttack()){
+                    return false;
+                }
+            }
+        }
+
+
+        return true;
+    }
+
+    @Override
+    public float[][] getPositionFactor() {
+        return positionFactor;
+    }
+
+    @Override
+    public void setPositionFactor(float[][] positionFactor) {
+        this.positionFactor = positionFactor;        
+    }
+
+    @Override
+    public void addObserver(NotifyMovement observer) {
+        observers.add(observer);       
+    }
+
+    @Override
+    public void removeObserver(NotifyMovement observer) {
+        observers.remove(observer);   
+    }
+
+    @Override
+    public ArrayList<NotifyMovement> getObservers() {
+        return observers;
+    }
+
+    @Override
+    public void notifyObservers() {
+        for(NotifyMovement nm : observers) nm.notifyMovement();
+    }
 }

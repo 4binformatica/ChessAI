@@ -1,6 +1,7 @@
 package pieces;
 
 import src.ChessPiece;
+import src.NotifyMovement;
 
 import java.util.ArrayList;
 
@@ -8,10 +9,25 @@ import src.Cell;
 
 public class Bishop implements ChessPiece {
 
-    private final int VALUE = 3;
+    private ArrayList<NotifyMovement> observers = new ArrayList<NotifyMovement>();
+
+
+    private final int VALUE = 30;
+    private final float[][] DEFAULT_POSITION_FACTOR = {
+        {-2, -1, -1, -1, -1, -1, -1, -2},
+        {-1, 0, 0, 0, 0, 0, 0, -1},
+        {-1, 0, 0.5f, 1, 1, 0.5f, 0, -1},
+        {-1, 0.5f, 0.5f, 1, 1, 0.5f, 0.5f, -1},
+        {-1, 0, 1, 1, 1, 1, 0, -1},
+        {-1, 1, 1, 1, 1, 1, 1, -1},
+        {-1, 0.5f, 0, 0, 0, 0, 0.5f, -1},
+        {-2, -1, -1, -1, -1, -1, -1, -2}
+    };
+
 
 
     private int value;
+    private float[][] positionFactor;
     private int color;
     private Cell cell;
     private boolean hasMoved = false;
@@ -20,6 +36,7 @@ public class Bishop implements ChessPiece {
         this.color = color;
         this.cell = cell;
         setValue(VALUE);
+        setPositionFactor(DEFAULT_POSITION_FACTOR);
     }
 
     public static boolean isValidateMove(Cell startCell, Cell endCell) {
@@ -52,12 +69,14 @@ public class Bishop implements ChessPiece {
     }
 
     @Override
-    public boolean move(Cell endCell) {
+    public boolean move(Cell endCell, boolean simulated) {
         if (isValidateMove(endCell)) {
             endCell.setPiece(this);
             getCell().setPiece(null);
             setCell(endCell);
             hasMoved = true;
+            if(!simulated)
+                notifyObservers();
             return true;
         } 
         return false;    
@@ -111,6 +130,17 @@ public class Bishop implements ChessPiece {
     public void setValue(int value) {
         this.value = value;
     }
+
+    @Override
+    public float[][] getPositionFactor() {
+        return positionFactor;
+    }
+
+    @Override
+    public void setPositionFactor(float[][] positionFactor) {
+        this.positionFactor = positionFactor;
+    }
+
 
     @Override
     public int getValue() {
@@ -184,6 +214,26 @@ public class Bishop implements ChessPiece {
             }
         }
         return possibleMoves;
+    }
+
+    @Override
+    public void addObserver(NotifyMovement observer) {
+        observers.add(observer);       
+    }
+
+    @Override
+    public void removeObserver(NotifyMovement observer) {
+        observers.remove(observer);   
+    }
+
+    @Override
+    public ArrayList<NotifyMovement> getObservers() {
+        return observers;
+    }
+
+    @Override
+    public void notifyObservers() {
+        for(NotifyMovement nm : observers) nm.notifyMovement();
     }
 
     
